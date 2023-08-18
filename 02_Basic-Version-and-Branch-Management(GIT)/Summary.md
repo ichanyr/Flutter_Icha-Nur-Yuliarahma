@@ -60,3 +60,6 @@ git branch -a
 jangan lupa git push -u origin <branch>
 
 PULL REQUEST: agar bisa berkontribusi thd repo yg sudah ada.
+
+
+(image.png)
