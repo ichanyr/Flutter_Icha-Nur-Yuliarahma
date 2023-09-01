@@ -1,5 +1,5 @@
 void main() {
-  int baris = 9;
+  // int baris = 9;
   int kolom = 9;
 
   print("Perkalian");
