@@ -155,9 +155,6 @@ class _AddContactsState extends State<AddContacts> {
             SizedBox(
               height: 8,
             ),
-            Text('Data'),
-            TextButton(onPressed: () {}, child: Text('Select')),
-            Text(DateFormat('dd-MM-yyyy').format(_dueDate)),
             ElevatedButton(
               onPressed: () {
                 if (formKey.currentState!.validate()) {
