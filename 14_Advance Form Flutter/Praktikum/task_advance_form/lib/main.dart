@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,115 +16,446 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0XFF22668D),
+          title: Text('Contacts'),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                child: Column(
+                  children: [
+                    Icon(Icons.mobile_friendly_rounded),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      'Create New Contacts',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                        '''Dalam rangka memperluas jaringan dan menjaga komunikasi yang efisien, mari mencatat informasi kontak kolega Anda.'''),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Divider(
+                      thickness: 2,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    AddContacts()
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class AddContacts extends StatefulWidget {
+  const AddContacts({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<AddContacts> createState() => _AddContactsState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _AddContactsState extends State<AddContacts> {
+  var formKey = GlobalKey<FormState>();
+  String? name = "";
+  int? number;
 
-  void _incrementCounter() {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+
+  List<Data> dataList = [];
+
+  void deleteContact(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      dataList.removeAt(index);
     });
+  }
+
+  void editContact(int index) {
+    setState(() {
+      nameController.text = dataList[index].name ?? '';
+      phoneNumberController.text = dataList[index].number.toString() ?? '';
+    });
+  }
+
+  DateTime _dueDate = DateTime.now();
+  final currentDate = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Form(
+        key: formKey,
+        child: Container(
+            child: Column(
+          children: [
+            TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Enter Name',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  name = value;
+                  List<String> words = value!.split(' ');
+                  for (var word in words) {
+                    if (word.length < 2 || !word.startsWith(RegExp(r'[A-Z]'))) {
+                      return 'Name must consist of at least 2 words with each word starting with a capital letter';
+                    }
+                  }
+
+                  // ignore: unnecessary_null_comparison
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter name';
+                  }
+                  if (RegExp(r'[0-9!@#%^&*(),.?":{}|<>]').hasMatch(value)) {
+                    return 'Name cannot contain numbers or special characters';
+                  }
+
+                  return null;
+                }),
+            SizedBox(
+              height: 16,
+            ),
+            TextFormField(
+              controller: phoneNumberController,
+              decoration: InputDecoration(
+                labelText: 'Phone Number',
+                hintText: 'Enter Phone Number',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                number = int.tryParse(value!);
+                // ignore: unnecessary_null_comparison
+                if (value == null || value.isEmpty) {
+                  return 'Please enter phone number';
+                }
+                if (!RegExp(r'^0[0-9]{7,14}$').hasMatch(value)) {
+                  return 'Phone number must start with 0 and be between 8 to 15 digits';
+                }
+
+                return null;
+              },
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            InteractiveWidget(),
+            ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Data saved successfully')));
+                  dataList.add(Data(
+                    name: name,
+                    number: number,
+                  ));
+
+                  for (var i = 0; i < dataList.length; i++) {
+                    print(dataList
+                        .map((data) => {
+                              'title': data.name,
+                              'subtitle': data.number,
+                            })
+                        .toList());
+                  }
+                  // print(dataList);
+
+                  setState(() {});
+
+                  formKey.currentState!.save();
+                  nameController.clear();
+                  phoneNumberController.clear();
+                }
+              },
+              child: Text('Save'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Color(0XFF22668D),
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )),
+      ),
+      SizedBox(
+        height: 24,
+      ),
+      Text(
+        'List Contacts',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+      ),
+      for (var i = 0; i < dataList.length; i++)
+        Column(children: [
+          Container(
+            width: double.infinity,
+            height: 58,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: Color(0XFF8ECDDD),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                CircleAvatar(
+                  child: Text(dataList[i].name!.substring(0, 1)),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dataList[i].name.toString(),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      dataList[i].number.toString(),
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+                Expanded(child: SizedBox()),
+                IconButton(
+                    onPressed: () {
+                      editContact(i);
+                    },
+                    icon: Icon(Icons.edit)),
+                IconButton(
+                    onPressed: () {
+                      deleteContact(i);
+                    },
+                    icon: Icon(Icons.delete)),
+              ]),
+            ),
+            // child: ListTile(
+            //   title: Text(dataList[i].name.toString()),
+            //   subtitle: Text(dataList[i].number.toString()),
+            //   leading: CircleAvatar(
+            //     child: Text(dataList[i].name!.substring(0, 1)),
+            //     backgroundColor: Colors.white,
+            //   ),
+            //   trailing: IconButton(
+            //     onPressed: () {},
+            //     icon: IconButton(
+            //         onPressed: () {
+            //           deleteContact(i);
+            //         },
+            //         icon: Icon(Icons.delete)),
+            //   ),
+          ),
+        ]),
+    ]);
+  }
+}
+
+class InteractiveWidget extends StatefulWidget {
+  const InteractiveWidget({super.key});
+
+  @override
+  State<InteractiveWidget> createState() => _InteractiveWidgetState();
+
+  buildDatePicker(BuildContext context) {}
+
+  buildColorPicker(BuildContext context) {}
+
+  buildFilePicker(BuildContext context) {}
+}
+
+class _InteractiveWidgetState extends State<InteractiveWidget> {
+  // menambahkan varible dueDate dan currentDate
+  DateTime _dueDate = DateTime.now();
+  final currentDate = DateTime.now();
+
+  // menambahkan variable currentColor
+  Color _currentColor = Colors.yellow;
+
+  // method pickFile
+  void _pickFile() async {
+    // variable result
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ["jpg"],
+    );
+    if (result == null) return;
+
+    // mendapatkan file dari object result
+    final file = result.files.first;
+    _openFile(file);
+  }
+
+  // method openFile
+  void _openFile(PlatformFile file) {
+    OpenFile.open(file.path);
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Interactive Widget'),
+        centerTitle: true,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Container(
+        padding: EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          children: [
+            // buildDatePicker
+            buildDatePicker(context),
+
+            SizedBox(
+              height: 32,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            // buildColorPicker
+            buildColorPicker(context),
+
+            // buildFilePicker
+            SizedBox(
+              height: 32,
             ),
+            buildFilePicker(context),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  Widget buildDatePicker(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Date'),
+            TextButton(
+                onPressed: () async {
+                  final selectDate = await showDatePicker(
+                      context: context,
+                      initialDate: currentDate,
+                      firstDate: DateTime(1990),
+                      lastDate: DateTime(currentDate.year + 5));
+                  setState(() {
+                    if (selectDate != null) {
+                      _dueDate = selectDate;
+                    }
+                  });
+                },
+                child: Text('Select'))
+          ],
+        ),
+        Text(
+          DateFormat('dd-MM-yyyy').format(_dueDate),
+        ),
+      ],
+    );
+  }
+
+  Widget buildColorPicker(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Color'),
+        SizedBox(
+          height: 8,
+        ),
+        Container(
+          height: 50,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: _currentColor,
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Center(
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(_currentColor)),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Choose Your Color'),
+                      content: BlockPicker(
+                          pickerColor: _currentColor,
+                          onColorChanged: (color) {
+                            setState(() {
+                              _currentColor = color;
+                            });
+                          }),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Save'))
+                      ],
+                    );
+                  });
+            },
+            child: Text('Choose Color'),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildFilePicker(BuildContext context) {
+    return Column(
+      children: [
+        Text('Choose File'),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              _pickFile();
+            },
+            child: Text('Choose and Open File'))
+      ],
+    );
+  }
+}
+
+class Data {
+  final String? name;
+  final int? number;
+
+  Data({this.name, this.number});
 }
