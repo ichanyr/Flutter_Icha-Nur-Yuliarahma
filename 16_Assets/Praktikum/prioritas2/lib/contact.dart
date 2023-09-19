@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
-import 'package:prioritas2/galery_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -133,6 +132,19 @@ class _AddContactsState extends State<AddContacts> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      Container(
+        height: 40,
+        child: ListView.builder(
+            itemCount: 3,
+            itemBuilder: ((context, index) {
+              return Container(
+                margin: EdgeInsets.only(top: 2),
+                color: Colors.red,
+                width: 30,
+                height: 30,
+              );
+            })),
+      ),
       Form(
         key: formKey,
         child: Container(
@@ -440,16 +452,10 @@ class _AddContactsState extends State<AddContacts> {
           height: 10,
         ),
         ElevatedButton(
-          onPressed: () {
-            // _pickFile();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => GalleryList(),
-              ),
-            );
-          },
-          child: Text('Choose and Open File'),
-        )
+            onPressed: () {
+              _pickFile();
+            },
+            child: Text('Choose and Open File'))
       ],
     );
   }
