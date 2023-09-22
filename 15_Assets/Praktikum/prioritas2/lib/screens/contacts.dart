@@ -5,11 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Contacts());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Contacts extends StatelessWidget {
+  const Contacts({super.key});
 
   // This widget is the root of your application.
   @override
@@ -19,7 +19,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0XFF22668D),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context); // Menggunakan Navigator.pop untuk kembali
+            },
+          ),
+          backgroundColor: Colors.deepPurple[200],
           title: Text('Contacts'),
           centerTitle: true,
         ),
@@ -132,19 +138,6 @@ class _AddContactsState extends State<AddContacts> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-        height: 40,
-        child: ListView.builder(
-            itemCount: 3,
-            itemBuilder: ((context, index) {
-              return Container(
-                margin: EdgeInsets.only(top: 2),
-                color: Colors.red,
-                width: 30,
-                height: 30,
-              );
-            })),
-      ),
       Form(
         key: formKey,
         child: Container(
