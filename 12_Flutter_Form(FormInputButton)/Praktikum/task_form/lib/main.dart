@@ -7,7 +7,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -113,9 +112,14 @@ class _AddContactsState extends State<AddContacts> {
                 validator: (value) {
                   name = value;
                   List<String> words = value!.split(' ');
+
+                  if (words.length != 2) {
+                    return 'Name must consist of exactly 2 words';
+                  }
+
                   for (var word in words) {
                     if (word.length < 2 || !word.startsWith(RegExp(r'[A-Z]'))) {
-                      return 'Name must consist of at least 2 words with each word starting with a capital letter';
+                      return 'Each word must start with a capital letter and have at least 2 characters';
                     }
                   }
 
@@ -254,28 +258,6 @@ class _AddContactsState extends State<AddContacts> {
                     icon: Icon(Icons.delete)),
               ]),
             ),
-            // child: ListTile(
-            //   title: Text(dataList[i].name.toString()),
-            //   subtitle: Text(dataList[i].number.toString()),
-            //   leading: CircleAvatar(
-            //     child: Text(dataList[i].name!.substring(0, 1)),
-            //     backgroundColor: Colors.white,
-            //   ),
-            //   trailing: Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       IconButton(
-            //         onPressed: () {},
-            //         icon: IconButton(
-            //             onPressed: () {
-            //               deleteContact(i);
-            //             },
-            //             icon: Icon(Icons.delete)),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           )
         ]),
     ]);
