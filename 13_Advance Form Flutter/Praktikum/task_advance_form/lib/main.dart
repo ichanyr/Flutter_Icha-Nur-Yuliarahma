@@ -93,12 +93,9 @@ class _AddContactsState extends State<AddContacts> {
     setState(() {
       nameController.text = dataList[index].name ?? '';
       phoneNumberController.text = dataList[index].number.toString() ?? '';
-      _selectedDate = dataList[index].date ??
-          DateTime.now(); // Set the selected date to the existing date
-      _currentColor = dataList[index].color ??
-          Colors.greenAccent; // Set the selected color to the existing color
-      _selectedFilePath = dataList[index]
-          .filePath; // Set the selected file path to the existing file path
+      _selectedDate = dataList[index].date ?? DateTime.now();
+      _currentColor = dataList[index].color ?? Colors.greenAccent;
+      _selectedFilePath = dataList[index].filePath;
       _editingIndex = index;
     });
   }
