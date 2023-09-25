@@ -93,8 +93,17 @@ class _AddContactsState extends State<AddContacts> {
     setState(() {
       nameController.text = dataList[index].name ?? '';
       phoneNumberController.text = dataList[index].number.toString() ?? '';
+      _selectedDate = dataList[index].date ??
+          DateTime.now(); // Set the selected date to the existing date
+      _currentColor = dataList[index].color ??
+          Colors.greenAccent; // Set the selected color to the existing color
+      _selectedFilePath = dataList[index]
+          .filePath; // Set the selected file path to the existing file path
+      _editingIndex = index;
     });
   }
+
+  int _editingIndex = -1;
 
 // menambahkan varible dueDate dan currentDate
   DateTime _dueDate = DateTime.now();
@@ -103,16 +112,16 @@ class _AddContactsState extends State<AddContacts> {
   DateTime _selectedDate = DateTime.now();
 
   // menambahkan variable currentColor
-  Color _currentColor = Colors.yellow;
+  Color _currentColor = Colors.greenAccent;
   // variabel untuk menyimpan warna
-  Color _selectedColor = Colors.yellow;
+  Color _selectedColor = Colors.greenAccent;
 
   // method pickFile
   void _pickFile() async {
     // variable result
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ["jpg"],
+      allowedExtensions: ["png"],
     );
     if (result == null) return;
 
@@ -132,19 +141,6 @@ class _AddContactsState extends State<AddContacts> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-        height: 40,
-        child: ListView.builder(
-            itemCount: 3,
-            itemBuilder: ((context, index) {
-              return Container(
-                margin: EdgeInsets.only(top: 2),
-                color: Colors.red,
-                width: 30,
-                height: 30,
-              );
-            })),
-      ),
       Form(
         key: formKey,
         child: Container(
@@ -160,9 +156,14 @@ class _AddContactsState extends State<AddContacts> {
                 validator: (value) {
                   name = value;
                   List<String> words = value!.split(' ');
+
+                  if (words.length != 2) {
+                    return 'Name must consist of exactly 2 words';
+                  }
+
                   for (var word in words) {
                     if (word.length < 2 || !word.startsWith(RegExp(r'[A-Z]'))) {
-                      return 'Name must consist of at least 2 words with each word starting with a capital letter';
+                      return 'Each word must start with a capital letter and have at least 2 characters';
                     }
                   }
 
@@ -210,10 +211,27 @@ class _AddContactsState extends State<AddContacts> {
                 if (formKey.currentState!.validate()) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Data saved successfully')));
-                  dataList.add(Data(
-                    name: name,
-                    number: number,
-                  ));
+                  if (name != null && number != null) {
+                    if (_editingIndex != -1) {
+                      // If _editingIndex is not -1, it means we're in edit mode
+                      dataList[_editingIndex] = Data(
+                        name: name,
+                        number: number,
+                        date: _selectedDate,
+                        color: _currentColor,
+                        filePath: _selectedFilePath,
+                      );
+                      _editingIndex = -1; // Reset _editingIndex after editing
+                    } else {
+                      dataList.add(Data(
+                        name: name,
+                        number: number,
+                        date: _selectedDate,
+                        color: _currentColor,
+                        filePath: _selectedFilePath,
+                      ));
+                    }
+                  }
 
                   for (var i = 0; i < dataList.length; i++) {
                     print(dataList
@@ -226,7 +244,6 @@ class _AddContactsState extends State<AddContacts> {
                             })
                         .toList());
                   }
-                  // print(dataList);
 
                   setState(() {});
 
@@ -464,6 +481,9 @@ class _AddContactsState extends State<AddContacts> {
 class Data {
   final String? name;
   final int? number;
+  final DateTime? date;
+  final Color? color;
+  final String? filePath;
 
-  Data({this.name, this.number});
+  Data({this.name, this.number, this.date, this.color, this.filePath});
 }
