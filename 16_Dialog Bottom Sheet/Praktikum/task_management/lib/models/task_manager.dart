@@ -3,7 +3,7 @@ import 'package:task_management/models/task_model.dart';
 
 class TaskManager extends ChangeNotifier {
   final _taskModels = <TaskModel>[];
-  List<TaskModel> get taskModel => List.unmodifiable(_taskModels);
+  List<TaskModel> get taskModels => List.unmodifiable(_taskModels);
 
   void deleteTask(int index) {
     _taskModels.removeAt(index);
