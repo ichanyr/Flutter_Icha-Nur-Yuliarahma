@@ -186,6 +186,9 @@ class _MyAppState extends State<MyApp> {
                       },
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.purple[300],
+                  ),
                   child: Text('Submit'),
                 ),
               ],

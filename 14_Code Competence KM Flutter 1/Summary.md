@@ -1,0 +1,1 @@
+Saya masih belum paham cara menampilkan alert dialog jika menggunakan stack.
