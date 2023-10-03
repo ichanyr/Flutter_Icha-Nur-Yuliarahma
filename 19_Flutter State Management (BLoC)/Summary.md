@@ -1,7 +1,6 @@
 Declarative UI
 -Flutter memiliki sifat declarative yang artinya flutter membangun UI nya pada screen untuk mencerminkan keadaan state saat ini.
 
-
 State
 -State adalah ketika sebuah widget sedang aktif dan widget tsb menyimpan data di memori.
 -Flutter akan membangun ulang UI nya ketika ada state atau data yang berubah.
@@ -14,7 +13,6 @@ Ephemeral State
 	>Switch Button
 -Tidak perlu state management yang kompleks
 -Hanya membutuhkan StatefulWidget dengan menggunakan fungsi setState()
-
 
 App State
 -Digunakan ketika bagian yang lain suatu aplikasi membutuhkan akses ke data state widget, contohnya:

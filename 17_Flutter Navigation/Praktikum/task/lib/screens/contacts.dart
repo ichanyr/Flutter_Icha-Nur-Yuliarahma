@@ -309,7 +309,6 @@ class _AddContactsState extends State<AddContacts> {
                             )),
                       ],
                     ),
-
                     SizedBox(
                       height: 4,
                     ),
