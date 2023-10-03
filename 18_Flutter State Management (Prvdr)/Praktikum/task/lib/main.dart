@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task/add_contact.dart';
 import 'package:task/contact.dart';
 import 'package:provider/provider.dart';
-import 'package:task/contact_list.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
