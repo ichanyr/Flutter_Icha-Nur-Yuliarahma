@@ -1,29 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:prioritas2/controllers/galery_manager.dart';
-import 'package:prioritas2/models/galery_model.dart';
+
 import 'package:provider/provider.dart';
 
 void main() {
-  GaleryModel galeryManager = GaleryModel(imagePath: '');
-
-  // Menambahkan gambar ke GaleryManager
-  galeryManager
-      .addGalery(GaleryModel(imagePath: 'assets/images/alterralogo.png'));
   runApp(const GalleryList());
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Flutter Demo',
-//       home: const GalleryList(),
-//     );
-//   }
-// }
 
 class GalleryList extends StatelessWidget {
   const GalleryList();
@@ -33,54 +15,63 @@ class GalleryList extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: Column(
-            children: [
-              Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(height: 8),
-              Container(
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      _navigateToNewPage(
-                          context, imagePath); // Pergi ke halaman baru
-                    },
-                    child: Text(
-                      'YA',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        return SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 100,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop(); // Tutup BottomSheet
+                          },
+                          child: Text(
+                            'TIDAK',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.green,
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop(); // Tutup BottomSheet
-                    },
-                    child: Text(
-                      'TIDAK',
-                      style: TextStyle(fontSize: 20),
+                    Container(
+                      width: 100,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            _navigateToNewPage(
+                                context, imagePath); // Pergi ke halaman baru
+                          },
+                          child: Text(
+                            'YA',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.green,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey,
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -113,11 +104,11 @@ class GalleryList extends StatelessWidget {
             children: value.galerysModel.map((galery) {
               return GestureDetector(
                 onTap: () {
-                  _showOptions(context, galery.imagePath);
+                  _showOptions(context, galery.image);
                 },
                 child: Card(
                   child: Image.asset(
-                    galery.imagePath,
+                    galery.image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -144,7 +135,11 @@ class NewPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Halaman Baru'),
       ),
-      body: Center(child: Image.asset(galeryManager.galerysModel[0].imagePath)),
+      body: Center(
+          child: Image.asset(
+        galeryManager.galerysModel[0].image,
+        fit: BoxFit.cover,
+      )),
     );
   }
 }

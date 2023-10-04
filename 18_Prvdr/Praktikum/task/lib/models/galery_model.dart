@@ -1,7 +1,7 @@
 class GaleryModel {
-  final String imagePath;
+  final String image;
 
-  GaleryModel({required this.imagePath});
-
-  void addGalery(GaleryModel galeryModel) {}
+  GaleryModel({
+    required this.image,
+  });
 }
