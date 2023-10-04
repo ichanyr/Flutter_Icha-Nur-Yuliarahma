@@ -14,3 +14,6 @@ Mendaftarkan Route
 -Tiap route adalah fungsi yang membentuk halaman
 
 Mengirim data ke halaman baru : menggunakan arguments saat melakukan pushNamed
+
+
+
