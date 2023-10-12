@@ -33,5 +33,17 @@ Serialisasi JSON
 -Javascript Object Notation
 -Cara penulisan data
 
-Deserialisasi JSON
--Mengubah bentuk JSON ke struktur data
+GET - menampilkan data dari server
+POST - mengirim data ke server / menambahkan data
+PUT - memperbaharui data dari client ke server
+DELETE - untuk menghapus data 
+
+HTTP - protokol untuk berkirim data pada internet
+
+DIO - package sebagai http client / protokol untuk melakukan rest api
+
+Serialisasi JSON - proses bagaimana data diubah ke dalam struktur JSON
+Deserialisasi JSON - mengubah bentuk JSON ke struktur data
+
+
+
