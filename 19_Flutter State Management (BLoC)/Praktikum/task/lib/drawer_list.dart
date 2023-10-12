@@ -14,7 +14,7 @@ class _DrawerListState extends State<DrawerList> {
   void _openContacts() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Contacts()),
+      MaterialPageRoute(builder: (context) => Contacts()),
     );
   }
 

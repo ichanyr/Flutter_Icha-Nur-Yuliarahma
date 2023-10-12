@@ -1,74 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
+import 'package:prioritas2/bloc/contact_bloc.dart';
 
 void main() {
-  runApp(const Contacts());
+  runApp(Contacts());
 }
 
 class Contacts extends StatelessWidget {
-  const Contacts({super.key});
+  var name;
+
+  // var name;
+
+  // const Contacts({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context); // Menggunakan Navigator.pop untuk kembali
-            },
-          ),
-          backgroundColor: Colors.deepPurple[200],
-          title: Text('Contacts'),
-          centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        home: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(
+                      context); // Menggunakan Navigator.pop untuk kembali
+                },
+              ),
+              backgroundColor: Colors.deepPurple[200],
+              title: Text('Contacts'),
+              centerTitle: true,
+            ),
+            body: BlocConsumer<ContactBloc, ContactState>(
+                listener: (context, state) {
+              if (state is ContactsLoaded) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Data saved successfully')));
+              }
+            }, builder: (context, state) {
+              return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Icon(Icons.mobile_friendly_rounded),
-                    SizedBox(
-                      height: 8,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 16),
+                      child: Column(
+                        children: [
+                          Icon(Icons.mobile_friendly_rounded),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Create New Contacts',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                              '''Dalam rangka memperluas jaringan dan menjaga komunikasi yang efisien, mari mencatat informasi kontak kolega Anda.'''),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Divider(
+                            thickness: 2,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          AddContacts(),
+                        ],
+                      ),
                     ),
-                    Text(
-                      'Create New Contacts',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                        '''Dalam rangka memperluas jaringan dan menjaga komunikasi yang efisien, mari mencatat informasi kontak kolega Anda.'''),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    AddContacts(),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              );
+            })));
   }
 }
 
