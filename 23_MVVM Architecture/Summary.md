@@ -27,3 +27,6 @@ Aturan
 	1. Letakkan pada bagian build.
 	2. Menggunakan getters yang ada pada ViewModel.
 	3. Data dapat langsung ditampilkan pada widgets.
+
+
+
