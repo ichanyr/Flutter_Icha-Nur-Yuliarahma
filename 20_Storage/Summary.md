@@ -15,3 +15,5 @@ Local Database (SQLite)
 -Bersifat privat.
 -Menggunakan SQLite database melalui package sqflite.
 -SQLite adalah database open source yang mendukung insert, read, update dan remove data.
+
+

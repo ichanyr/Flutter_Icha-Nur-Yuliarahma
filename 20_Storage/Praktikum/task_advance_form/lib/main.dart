@@ -20,15 +20,14 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0XFF22668D),
-          title: Text('Contacts'),
+          title: const Text('Contacts'),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
+        body: const SingleChildScrollView(
           child: Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 child: Column(
                   children: [
                     Icon(Icons.mobile_friendly_rounded),
@@ -145,7 +144,7 @@ class _AddContactsState extends State<AddContacts> {
           children: [
             TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name',
                   hintText: 'Enter Name',
                   border: OutlineInputBorder(),
@@ -174,12 +173,12 @@ class _AddContactsState extends State<AddContacts> {
 
                   return null;
                 }),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             TextFormField(
               controller: phoneNumberController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Phone Number',
                 hintText: 'Enter Phone Number',
                 border: OutlineInputBorder(),
@@ -197,7 +196,7 @@ class _AddContactsState extends State<AddContacts> {
                 return null;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             buildDatePicker(context),
@@ -264,10 +263,10 @@ class _AddContactsState extends State<AddContacts> {
           ],
         )),
       ),
-      SizedBox(
+      const SizedBox(
         height: 24,
       ),
-      Text(
+      const Text(
         'List Contacts',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
       ),
@@ -287,7 +286,7 @@ class _AddContactsState extends State<AddContacts> {
                 CircleAvatar(
                   child: Text(dataList[i].name!.substring(0, 1)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
                 Column(
@@ -295,10 +294,10 @@ class _AddContactsState extends State<AddContacts> {
                   children: [
                     Text(
                       dataList[i].name.toString(),
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Text(
@@ -306,7 +305,7 @@ class _AddContactsState extends State<AddContacts> {
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     // Tampilkan tanggal
@@ -315,12 +314,12 @@ class _AddContactsState extends State<AddContacts> {
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Row(
                       children: [
-                        Text('Color: '),
+                        const Text('Color: '),
                         Container(
                             height: 10, // Atur tinggi container keinginan Anda
                             width: 10, // Atur lebar container keinginan Anda
@@ -331,7 +330,7 @@ class _AddContactsState extends State<AddContacts> {
                       ],
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Text(
